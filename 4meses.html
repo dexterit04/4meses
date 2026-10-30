@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>4 mesesitos 💜</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; overflow: hidden; touch-action: manipulation; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: linear-gradient(160deg, #2a0a4a 0%, #5b21b6 45%, #a855f7 100%);
+    color: #fff;
+    user-select: none;
+  }
+
+  /* Contenido central */
+  .content {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 24px; z-index: 5; pointer-events: none;
+  }
+  .content > * { pointer-events: auto; }
+  .small { font-size: 15px; letter-spacing: 2px; color: #f5d0fe; margin-bottom: 10px; }
+  h1 {
+    font-size: clamp(34px, 11vw, 60px); line-height: 1.1;
+    text-shadow: 0 4px 20px rgba(0,0,0,.35);
+    animation: latido 2.5s ease-in-out infinite;
+  }
+  h1 span { color: #f5d0fe; font-style: italic; }
+  .fecha { margin-top: 12px; color: #e9d5ff; font-size: 15px; }
+
+  .contador { display: flex; gap: 10px; margin-top: 22px; }
+  .caja {
+    background: rgba(255,255,255,.14); backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 14px; padding: 10px 8px; min-width: 62px;
+  }
+  .caja b { display: block; font-size: 24px; }
+  .caja small { font-size: 11px; color: #e9d5ff; }
+
+  .botones { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 26px; }
+  button, .btn-link {
+    padding: 13px 24px; font-size: 16px; font-family: inherit;
+    border: none; border-radius: 30px; color: #4c1d95; background: #f5d0fe;
+    box-shadow: 0 6px 20px rgba(0,0,0,.3); cursor: pointer; text-decoration: none;
+    display: inline-block;
+  }
+  button:active, .btn-link:active { transform: scale(.95); }
+  .hint { margin-top: 16px; font-size: 13px; color: #e9d5ff; opacity: .85; animation: parpadeo 2s infinite; }
+
+  /* Ventanas (mensaje y playlist) */
+  .modal {
+    position: fixed; inset: 0; z-index: 20; display: none;
+    align-items: center; justify-content: center; padding: 20px;
+    background: rgba(20, 5, 40, .7);
+  }
+  .modal.abierto { display: flex; }
+  .carta {
+    background: linear-gradient(160deg, #faf5ff, #e9d5ff);
+    color: #4c1d95; border-radius: 22px; padding: 26px 22px; width: 100%; max-width: 380px;
+    max-height: 90vh; overflow-y: auto;
+    text-align: center; line-height: 1.6; font-size: 16.5px;
+    animation: aparece .5s ease;
+  }
+  .carta h2 { margin-bottom: 12px; font-size: 24px; }
+  .carta p + p { margin-top: 12px; }
+  .carta button, .carta .btn-link { margin-top: 16px; background: #7e22ce; color: #fff; }
+  .carta .btn-link { margin-right: 6px; }
+
+  /* Gatitos */
+  .gatitos { width: 200px; max-width: 70%; display: block; margin: 0 auto 10px; }
+  .corazon { transform-origin: 100px 18px; animation: latido 1.2s ease-in-out infinite; }
+  .playlist iframe { border-radius: 14px; margin-top: 8px; }
+
+  /* Flores */
+  .flor {
+    position: fixed; z-index: 2; pointer-events: none;
+    transform: scale(0) rotate(-90deg);
+    animation: florece 1s cubic-bezier(.2, 1.4, .4, 1) forwards;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,.25));
+  }
+  .flor svg { width: 100%; height: 100%; animation: giro 14s linear infinite; }
+
+  /* Pétalos que caen */
+  .petalo {
+    position: fixed; top: -30px; z-index: 1; pointer-events: none;
+    border-radius: 80% 0 80% 0; opacity: .8;
+    animation: cae linear forwards;
+  }
+
+  /* Estrellitas de fondo */
+  .estrella {
+    position: fixed; z-index: 0; pointer-events: none;
+    color: #fff7c2; animation: brilla ease-in-out infinite;
+  }
+
+  @keyframes florece { to { transform: scale(1) rotate(0deg); } }
+  @keyframes giro { to { transform: rotate(360deg); } }
+  @keyframes cae { to { transform: translateY(110vh) translateX(var(--dx)) rotate(540deg); } }
+  @keyframes latido { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+  @keyframes parpadeo { 0%,100% { opacity: .85; } 50% { opacity: .3; } }
+  @keyframes aparece { from { opacity: 0; transform: translateY(30px) scale(.9); } to { opacity: 1; transform: none; } }
+  @keyframes brilla { 0%,100% { opacity: .15; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.2); } }
+</style>
+</head>
+<body>
+
+<div class="content">
+  <p class="small">Para mi estrellita ⭐</p>
+  <h1>¡Cumplimos<br><span>4 mesesitos</span>!</h1>
+  <p class="fecha">Desde el 25 de junio de 2026</p>
+
+  <div class="contador">
+    <div class="caja"><b id="d">0</b><small>días</small></div>
+    <div class="caja"><b id="h">0</b><small>horas</small></div>
+    <div class="caja"><b id="m">0</b><small>min</small></div>
+    <div class="caja"><b id="s">0</b><small>seg</small></div>
+  </div>
+
+  <div class="botones">
+    <button id="btnMensaje">Abrir mensaje 💌</button>
+    <button id="btnPlaylist">Nuestra playlist 🎶</button>
+  </div>
+  <p class="hint">✨ Toca la pantalla para plantar flores ✨</p>
+</div>
+
+<!-- Mensaje -->
+<div class="modal" id="modalMensaje">
+  <div class="carta">
+    <h2>Para ti, mi estrellita ⭐</h2>
+    <p>
+      Estos 4 meses son los más grandiosos. Amo conocerte día con día
+      y quiero durar para siempre a tu ladito.
+    </p>
+    <p>
+      Eres una niña muy bonita, muy inteligente y muy grandiosa.
+      Eres un rayito de luz y una niña que jamás deja de sorprenderme.
+    </p>
+    <p>
+      Cada momento a tu lado lo disfruto tanto. Me hace feliz verte,
+      incluso desde lejos. Tienes una mirada en la que me pierdo por completo,
+      y esa sonrisa que ilumina mundos enteros, pero mi mundo lo ilumina
+      y le da vueltas sin parar.
+    </p>
+    <p>
+      Quiero estar millones de meses a tu lado y vivir un sinfín de aventuras.
+      A tu lado todo es mejor, y así como tú mejoras mis días,
+      quiero poder mejorar los tuyos.
+    </p>
+    <p>
+      Te llenaría de besitos esa carita linda que tienes en las mañanas,
+      días y noches. Tus abrazos y tu presencia hacen que la vida
+      sea más colorida.
+    </p>
+    <p>En un mundo lleno de desastre, tú eres mi paz 💜</p>
+    <button data-cerrar>Cerrar</button>
+  </div>
+</div>
+
+<!-- Playlist -->
+<div class="modal" id="modalPlaylist">
+  <div class="carta playlist">
+    <svg class="gatitos" viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- colas -->
+      <path d="M40 118 C8 118 4 84 26 82" fill="none" stroke="#a78bfa" stroke-width="9" stroke-linecap="round"/>
+      <path d="M160 118 C192 118 196 84 174 82" fill="none" stroke="#6d28d9" stroke-width="9" stroke-linecap="round"/>
+      <!-- cuerpos -->
+      <ellipse cx="72" cy="108" rx="36" ry="20" fill="#c4b5fd"/>
+      <ellipse cx="128" cy="108" rx="36" ry="20" fill="#7c3aed"/>
+      <!-- orejas gatito 1 -->
+      <polygon points="56,58 58,30 76,46" fill="#c4b5fd"/>
+      <polygon points="80,46 94,32 98,58" fill="#c4b5fd"/>
+      <!-- orejas gatito 2 -->
+      <polygon points="102,58 106,32 120,46" fill="#7c3aed"/>
+      <polygon points="124,46 142,30 144,58" fill="#7c3aed"/>
+      <!-- cabezas pegaditas -->
+      <circle cx="78" cy="70" r="26" fill="#c4b5fd"/>
+      <circle cx="122" cy="70" r="26" fill="#7c3aed"/>
+      <!-- ojitos felices -->
+      <path d="M63 70 Q68 64 73 70" fill="none" stroke="#3b0764" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M83 70 Q88 64 93 70" fill="none" stroke="#3b0764" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M107 70 Q112 64 117 70" fill="none" stroke="#f5d0fe" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M127 70 Q132 64 137 70" fill="none" stroke="#f5d0fe" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- naricitas -->
+      <polygon points="74,77 82,77 78,82" fill="#f472b6"/>
+      <polygon points="118,77 126,77 122,82" fill="#f9a8d4"/>
+      <!-- cachetes -->
+      <circle cx="62" cy="80" r="4" fill="#f9a8d4" opacity=".7"/>
+      <circle cx="138" cy="80" r="4" fill="#f9a8d4" opacity=".7"/>
+      <!-- corazoncito -->
+      <text class="corazon" x="100" y="26" text-anchor="middle" font-size="26">💜</text>
+    </svg>
+
+    <h2>Nuestra playlist 🎶</h2>
+    <p>Canciones que me hacen pensar en ti.</p>
+
+    <iframe id="spotify" width="100%" height="152" frameborder="0" loading="lazy"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+
+    <a class="btn-link" id="linkSpotify" target="_blank" rel="noopener">Abrir en Spotify</a>
+    <button data-cerrar>Cerrar</button>
+  </div>
+</div>
+
+<script>
+  // ===== CAMBIA ESTO: el ID de tu playlist de Spotify =====
+  const PLAYLIST_ID = "TU_ID_DE_PLAYLIST";
+
+  // ===== Contador desde 25/06/2026 =====
+  const INICIO = new Date(2026, 5, 25, 0, 0, 0); // mes 5 = junio
+  function actualizar() {
+    let diff = Math.max(0, Date.now() - INICIO.getTime());
+    const d = Math.floor(diff / 86400000); diff %= 86400000;
+    const h = Math.floor(diff / 3600000);  diff %= 3600000;
+    const m = Math.floor(diff / 60000);    diff %= 60000;
+    const s = Math.floor(diff / 1000);
+    document.getElementById('d').textContent = d;
+    document.getElementById('h').textContent = h;
+    document.getElementById('m').textContent = m;
+    document.getElementById('s').textContent = s;
+  }
+  actualizar(); setInterval(actualizar, 1000);
+
+  // ===== Estrellitas de fondo =====
+  for (let i = 0; i < 30; i++) {
+    const e = document.createElement('div');
+    e.className = 'estrella';
+    e.textContent = '✦';
+    e.style.left = Math.random() * 100 + 'vw';
+    e.style.top = Math.random() * 100 + 'vh';
+    e.style.fontSize = (8 + Math.random() * 14) + 'px';
+    e.style.animationDuration = (2 + Math.random() * 3) + 's';
+    e.style.animationDelay = (Math.random() * 3) + 's';
+    document.body.appendChild(e);
+  }
+
+  // ===== Flores =====
+  const colores = [
+    ['#c084fc', '#7e22ce'], ['#e9d5ff', '#a855f7'], ['#d946ef', '#86198f'],
+    ['#a78bfa', '#5b21b6'], ['#f0abfc', '#c026d3'], ['#ddd6fe', '#8b5cf6']
+  ];
+  const flores = [];
+
+  function crearFlor(x, y) {
+    const tam = 60 + Math.random() * 60;
+    const petalos = 5 + Math.floor(Math.random() * 4);
+    const [c1, c2] = colores[Math.floor(Math.random() * colores.length)];
+    const id = 'g' + Math.random().toString(36).slice(2, 8);
+
+    let pet = '';
+    for (let i = 0; i < petalos; i++) {
+      pet += `<ellipse cx="0" cy="-24" rx="12" ry="24" fill="url(#${id})"
+               transform="rotate(${(360 / petalos) * i})" opacity=".95"/>`;
+    }
+    const el = document.createElement('div');
+    el.className = 'flor';
+    el.style.width = el.style.height = tam + 'px';
+    el.style.left = (x - tam / 2) + 'px';
+    el.style.top = (y - tam / 2) + 'px';
+    el.innerHTML = `
+      <svg viewBox="-50 -50 100 100">
+        <defs>
+          <radialGradient id="${id}" cx="50%" cy="85%" r="80%">
+            <stop offset="0%" stop-color="${c2}"/>
+            <stop offset="100%" stop-color="${c1}"/>
+          </radialGradient>
+        </defs>
+        ${pet}
+        <circle r="9" fill="#fde68a"/>
+        <circle r="4" fill="#f59e0b"/>
+      </svg>`;
+    document.body.appendChild(el);
+    flores.push(el);
+    if (flores.length > 70) flores.shift().remove();
+  }
+
+  // Tocar / arrastrar para plantar flores
+  let ultimo = 0;
+  function plantar(e) {
+    if (e.target.closest('button') || e.target.closest('.modal') || e.target.closest('a')) return;
+    const ahora = Date.now();
+    if (ahora - ultimo < 90) return;
+    ultimo = ahora;
+    crearFlor(e.clientX, e.clientY);
+    if (navigator.vibrate) navigator.vibrate(10);
+  }
+  document.addEventListener('pointerdown', plantar);
+  document.addEventListener('pointermove', e => { if (e.buttons || e.pointerType === 'touch') plantar(e); });
+
+  // ===== Pétalos cayendo =====
+  function petalo() {
+    const p = document.createElement('div');
+    const t = 8 + Math.random() * 14;
+    p.className = 'petalo';
+    p.style.width = p.style.height = t + 'px';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.background = colores[Math.floor(Math.random() * colores.length)][0];
+    p.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+    p.style.animationDuration = (6 + Math.random() * 6) + 's';
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 12500);
+  }
+  setInterval(petalo, 400);
+
+  // Flores iniciales
+  for (let i = 0; i < 8; i++) {
+    setTimeout(() => crearFlor(
+      Math.random() * innerWidth,
+      Math.random() * innerHeight
+    ), i * 250);
+  }
+
+  // ===== Ventanas =====
+  const modalMensaje = document.getElementById('modalMensaje');
+  const modalPlaylist = document.getElementById('modalPlaylist');
+
+  function lluviaDeFlores(n) {
+    for (let i = 0; i < n; i++) {
+      setTimeout(() => crearFlor(Math.random() * innerWidth, Math.random() * innerHeight), i * 80);
+    }
+  }
+
+  document.getElementById('btnMensaje').onclick = () => {
+    modalMensaje.classList.add('abierto');
+    lluviaDeFlores(15);
+  };
+
+  document.getElementById('btnPlaylist').onclick = () => {
+    const iframe = document.getElementById('spotify');
+    if (!iframe.src) {
+      iframe.src = `https://open.spotify.com/playlist/3rM8lWtJm9hvzhLllPCuix?si=037Pe_5dR1el9NVkvB0o3w&utm_source=copy-link&pi=najby_gGSMy04&pt=5028752fe9bc6f63d41d1fd57107fc87`;
+      document.getElementById('linkSpotify').href = `https://open.spotify.com/playlist/3rM8lWtJm9hvzhLllPCuix?si=037Pe_5dR1el9NVkvB0o3w&utm_source=copy-link&pi=najby_gGSMy04&pt=5028752fe9bc6f63d41d1fd57107fc87`;
+    }
+    modalPlaylist.classList.add('abierto');
+    lluviaDeFlores(10);
+  };
+
+  document.querySelectorAll('[data-cerrar]').forEach(b => {
+    b.onclick = () => document.querySelectorAll('.modal').forEach(m => m.classList.remove('abierto'));
+  });
+</script>
+</body>
+</html>
