@@ -205,7 +205,7 @@
 
 <script>
   // ===== CAMBIA ESTO: el ID de tu playlist de Spotify =====
-  const PLAYLIST_ID = "TU_ID_DE_PLAYLIST";
+  const PLAYLIST_ID = "3rM8lWtJm9hvzhLllPCuix";
 
   // ===== Contador desde 25/06/2026 =====
   const INICIO = new Date(2026, 5, 25, 0, 0, 0); // mes 5 = junio
@@ -327,13 +327,13 @@
   };
 
   document.getElementById('btnPlaylist').onclick = () => {
-    const iframe = document.getElementById('spotify');
-    if (!iframe.src) {
-      iframe.src = `https://open.spotify.com/playlist/3rM8lWtJm9hvzhLllPCuix?si=037Pe_5dR1el9NVkvB0o3w&utm_source=copy-link&pi=najby_gGSMy04&pt=5028752fe9bc6f63d41d1fd57107fc87`;
-      document.getElementById('linkSpotify').href = `https://open.spotify.com/playlist/3rM8lWtJm9hvzhLllPCuix?si=037Pe_5dR1el9NVkvB0o3w&utm_source=copy-link&pi=najby_gGSMy04&pt=5028752fe9bc6f63d41d1fd57107fc87`;
-    }
-    modalPlaylist.classList.add('abierto');
-    lluviaDeFlores(10);
+  const iframe = document.getElementById('spotify');
+  if (!iframe.src) {
+    iframe.src = `https://open.spotify.com/embed/playlist/${PLAYLIST_ID}?utm_source=generator`;
+    document.getElementById('linkSpotify').href = `https://open.spotify.com/playlist/${PLAYLIST_ID}`;
+  }
+  modalPlaylist.classList.add('abierto');
+  lluviaDeFlores(10);
   };
 
   document.querySelectorAll('[data-cerrar]').forEach(b => {
